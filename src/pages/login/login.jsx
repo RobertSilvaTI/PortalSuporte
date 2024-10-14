@@ -4,24 +4,45 @@ import { Link } from 'react-router-dom';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../../services/firebaseConfig';
 import { useState } from 'react';
+import { AppRoutes } from '../../routes/AppRoutes.jsx';
+import Home from '../home/home.jsx';
 
 function Login() {
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
 
         const [
-          signInWithEmailAndPassword,
-          user,
-          loading,
-          error,
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
         ] = useSignInWithEmailAndPassword(auth);
 
-        function ValidarLogin (e) {
+        function validarLogin (e) {
+            e.preventDefault();
             signInWithEmailAndPassword(email, password);
         
-            if (user) {
+            /*if (user) {
                 return console.log(user);
-            }
+            }*/
+        }
+
+        if (error) {
+            return (
+                <div>
+                  <p>Error: {error.message}</p>
+                </div>
+            );               
+        }
+        if (loading) {
+            return <p>Loading...</p>;
+        }
+        if (user) {
+            return (
+                <div>
+                  <p>Signed In User: {user.email}</p>
+                </div>
+            );
         }
     
 
@@ -50,7 +71,7 @@ function Login() {
                     />
                     <br />
                     <a href="http://192.168.0.102:3000/login" target='_blank' className='link'>Esqueci minha senha</a>
-                    <button className='btn-login' type='submit' onClick={ValidarLogin}>
+                    <button className='btn-login' type='submit' onClick={validarLogin}>
                             Acessar
                     </button>
                 </form>
